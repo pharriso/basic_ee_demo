@@ -1,0 +1,14 @@
+---
+ansible-navigator:
+  execution-environment:
+    container-engine: podman
+    image: registry.redhat.io/ansible-automation-platform-20-early-access/ee-supported-rhel8:2.0.0
+    pull-policy: missing
+  logging:
+    level: critical
+    append: False
+    file: /tmp/navigator-log.txt
+  playbook-artifact:
+    enable: True
+    replay: /tmp/{playbook_name}-artifact-{ts_utc}.json
+    save-as: /tmp/{playbook_name}-artifact-{ts_utc}.json

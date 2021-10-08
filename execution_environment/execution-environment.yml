@@ -1,0 +1,11 @@
+---
+version: 1
+build_arg_defaults:
+  EE_BASE_IMAGE: 'registry.redhat.io/ansible-automation-platform-20-early-access/ee-minimal-rhel8:2.0.0'
+dependencies:
+  # python modules
+  python: requirements.txt
+  # collections
+  galaxy: requirements.yml
+  # If you need to install dependencies with yum/dnf
+  #system: bindep.txt

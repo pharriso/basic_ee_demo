@@ -1,0 +1,13 @@
+---
+
+- name: just digging
+  hosts: localhost
+  gather_facts: false
+  tasks:
+  - name: lookup redhat.com and set fact
+    set_fact:
+      redhatdotcom_ip: "{{ lookup('dig', 'redhat.com') }}"
+
+  - name: print redhat.com ip
+    debug:
+      msg: redhat.com resolves to {{ redhatdotcom_ip }}
