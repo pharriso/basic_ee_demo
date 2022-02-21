@@ -1,8 +1,7 @@
 ---
 version: 1
 build_arg_defaults:
-  EE_BASE_IMAGE: 'registry.redhat.io/ansible-automation-platform-20-early-access/ee-minimal-rhel8:2.0.0'
-  EE_BUILDER_IMAGE: 'registry.redhat.io/ansible-automation-platform-20-early-access/ansible-builder-rhel8:2.0'
+  EE_BASE_IMAGE: 'registry.redhat.io/ansible-automation-platform-21/ee-minimal-rhel8:latest'
 
 # used for hub credentials
 #ansible_config: 'ansible.cfg'
@@ -10,6 +9,6 @@ dependencies:
   # python modules
   python: requirements.txt
   # collections
-  galaxy: requirements.yml
+  #galaxy: requirements.yml
   # If you need to install dependencies with yum/dnf
   #system: bindep.txt
