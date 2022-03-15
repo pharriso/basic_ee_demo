@@ -1,0 +1,32 @@
+ARG EE_BASE_IMAGE=registry.redhat.io/ansible-automation-platform-21/ee-supported-rhel8:1.0.1-24
+ARG EE_BUILDER_IMAGE=registry.redhat.io/ansible-automation-platform-21/ansible-builder-rhel8:1.0.1-39
+
+FROM $EE_BASE_IMAGE as galaxy
+ARG ANSIBLE_GALAXY_CLI_COLLECTION_OPTS=
+USER root
+
+ADD _build /build
+WORKDIR /build
+
+
+FROM $EE_BUILDER_IMAGE as builder
+ADD _build/requirements.txt requirements.txt
+RUN ansible-builder introspect --sanitize --user-pip=requirements.txt --write-bindep=/tmp/src/bindep.txt --write-pip=/tmp/src/requirements.txt
+# Remove UBI repo, add my pip.conf and ca cert
+RUN rm -f /etc/yum.repos.d/ubi.repo
+ADD pip.conf /etc/pip.conf
+ADD demolab-ca.crt /etc/pki/ca-trust/source/anchors/demolab-ca.crt
+RUN update-ca-trust
+# end of modifications
+RUN assemble
+
+FROM $EE_BASE_IMAGE
+USER root
+COPY --from=builder /output/ /output/
+# Remove UBI repo, add my pip.conf and ca cert
+RUN rm -f /etc/yum.repos.d/ubi.repo
+ADD pip.conf /etc/pip.conf
+ADD demolab-ca.crt /etc/pki/ca-trust/source/anchors/demolab-ca.crt
+RUN update-ca-trust
+# end of modifications
+RUN /output/install-from-bindep && rm -rf /output/wheels
